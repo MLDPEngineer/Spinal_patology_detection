@@ -24,9 +24,9 @@ from . import assert_training_model
 def default_classification_model(
     num_classes,
     num_anchors,
-    pyramid_feature_size=256,
+    pyramid_feature_size=256,#256
     prior_probability=0.01,
-    classification_feature_size=256,
+    classification_feature_size=256,#256
     name='classification_submodel'
 ):
     """ Creates the default regression submodel.
