@@ -4,3 +4,9 @@ images/
 descr/
 
 snapshots/
+
+*.zip
+
+logs/
+
+*.h5
