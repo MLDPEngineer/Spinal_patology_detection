@@ -163,9 +163,9 @@ def create_callbacks(model, training_model, prediction_model, validation_generat
             log_dir                = args.tensorboard_dir,
             histogram_freq         = 0,
             batch_size             = args.batch_size,
-            write_graph            = True,
-            write_grads            = False,
-            write_images           = False,
+            write_graph            = False,
+            write_grads            = True,
+            write_images           = True,
             embeddings_freq        = 0,
             embeddings_layer_names = None,
             embeddings_metadata    = None
