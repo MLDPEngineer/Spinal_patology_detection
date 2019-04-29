@@ -63,9 +63,16 @@ def makedirs(path):
 def get_session():
     """ Construct a modified tf session.
     """
+    #GPU
     config = tf.ConfigProto()
     config.gpu_options.allow_growth = True
-    return tf.Session(config=config)
+    #TPU
+    if 'COLAB_TPU_ADDR' not in os.environ:
+      print('ERROR: Not connected to a TPU runtime; please see the first cell in this notebook for instructions!')
+    else:
+        tpu_address = 'grpc://' + os.environ['COLAB_TPU_ADDR']
+        print ('TPU address is', tpu_address)
+    return tf.Session(tpu_address)
 
 
 def model_with_weights(model, weights, skip_mismatch):
