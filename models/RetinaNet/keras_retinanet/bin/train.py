@@ -66,13 +66,13 @@ def get_session():
     #GPU
     config = tf.ConfigProto()
     config.gpu_options.allow_growth = True
-    # #TPU
-    # if 'COLAB_TPU_ADDR' not in os.environ:
-    #   print('ERROR: Not connected to a TPU runtime; please see the first cell in this notebook for instructions!')
-    # else:
-    #     tpu_address = 'grpc://' + os.environ['COLAB_TPU_ADDR']
-    #     print ('TPU address is', tpu_address)
-    return tf.Session(config=config)
+    #TPU
+    if 'COLAB_TPU_ADDR' not in os.environ:
+      print('ERROR: Not connected to a TPU runtime; please see the first cell in this notebook for instructions!')
+    else:
+        tpu_address = 'grpc://' + os.environ['COLAB_TPU_ADDR']
+        print ('TPU address is', tpu_address)
+    return tf.Session(tpu_address)
 
 
 def model_with_weights(model, weights, skip_mismatch):
@@ -439,8 +439,8 @@ def main(args=None):
     check_keras_version()
 
     # optionally choose specific GPU
-    if args.gpu:
-        os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu
+    # if args.gpu:
+    #     os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu
     keras.backend.tensorflow_backend.set_session(get_session())
 
     # optionally load config parameters
@@ -475,6 +475,14 @@ def main(args=None):
             lr=args.lr,
             config=args.config
         )
+
+        TPU_WORKER = 'grpc://' + os.environ['COLAB_TPU_ADDR']
+        tf.logging.set_verbosity(tf.logging.INFO)
+
+        training_model = tf.contrib.tpu.keras_to_tpu_model(
+            training_model,
+            strategy=tf.contrib.tpu.TPUDistributionStrategy(
+                tf.contrib.cluster_resolver.TPUClusterResolver(TPU_WORKER)))
 
     # print model summary
     print(model.summary())
