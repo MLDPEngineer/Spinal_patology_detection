@@ -63,7 +63,7 @@ class Evaluate(keras.callbacks.TensorBoard):
             for side in ['tr_', 'val_']:
                 self.writers[side+metric+'_writer'] = tf.summary.FileWriter(os.path.join(log_dir, side+metric))
 
-        super(Evaluate, self).__init__(write_graph=False)
+        super(Evaluate, self).__init__(write_graph=False, write_images=True, write_grads=True)
 
     def on_epoch_end(self, epoch, logs=None):
         logs = logs or {}
@@ -119,5 +119,5 @@ class Evaluate(keras.callbacks.TensorBoard):
 
     def on_train_end(self, logs=None):
         super(Evaluate, self).on_train_end(logs)
-        for v in self.writers:
+        for k,v in self.writers.items():
             v.close()

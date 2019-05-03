@@ -426,8 +426,7 @@ def parse_args(args):
     return check_args(parser.parse_args(args))
 
 
-def main(args=None):
-    # parse arguments
+def run(args=None):
     if args is None:
         args = sys.argv[1:]
     args = parse_args(args)
@@ -523,6 +522,39 @@ def main(args=None):
         max_queue_size=args.max_queue_size,
         validation_data=validation_generator
     )
+
+        # csv /home/protus/Documents/Projects/CompVision/train_annotations.csv \
+        # /home/protus/Documents/Projects/CompVision/classes.csv \
+        # --val-annotations /home/protus/Documents/Projects/CompVision/valid_annotations.csv".split()
+
+def train_ipython(dataset_len=None, 
+                    batch_size=1,
+                    epochs=10,
+                    train_annotations=None,
+                    valid_annotations=None,
+                    classes=None,
+                    snapshots_dir=None):
+
+    steps = dataset_len//batch_size if dataset_len else 10
+    snapshots_dir = snapshots_dir if snapshots_dir else r'./snapshots'
+
+    assert train_annotations and valid_annotations and classes, \
+        "Не указаны: train_annotations, valid_annotations, classes"
+
+    args = "--steps {0} \
+        --epochs {1} \
+        --weighted-average \
+        --compute-val-loss \
+        csv {2} \
+        {3} \
+        --val-annotations {4}". \
+        format(steps, epochs, train_annotations, classes, valid_annotations).split()
+
+    run(args)
+
+
+def main(args=None):
+    run(args)
 
 
 if __name__ == '__main__':
