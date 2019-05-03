@@ -527,7 +527,7 @@ def run(args=None):
         # /home/protus/Documents/Projects/CompVision/classes.csv \
         # --val-annotations /home/protus/Documents/Projects/CompVision/valid_annotations.csv".split()
 
-def train_ipython(dataset_len=None, 
+def train_ipython(steps=None, 
                     batch_size=1,
                     epochs=10,
                     train_annotations=None,
@@ -535,7 +535,7 @@ def train_ipython(dataset_len=None,
                     classes=None,
                     snapshots_dir=None):
 
-    steps = dataset_len//batch_size if dataset_len else 10
+    # steps = dataset_len//batch_size if dataset_len else 10
     snapshots_dir = snapshots_dir if snapshots_dir else r'./snapshots'
 
     assert train_annotations and valid_annotations and classes, \
