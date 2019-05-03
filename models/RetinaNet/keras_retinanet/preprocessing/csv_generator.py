@@ -122,7 +122,7 @@ class CSVGenerator(Generator):
         self,
         csv_data_file,
         csv_class_file,
-        base_dir=None,
+        base_dir=None, #redefined in line 197
         **kwargs
     ):
         """ Initialize a CSV data generator.
@@ -194,7 +194,7 @@ class CSVGenerator(Generator):
     def image_path(self, image_index):
         """ Returns the image path for image_index.
         """
-        return os.path.join(self.base_dir, self.image_names[image_index])
+        return self.image_names[image_index] #os.path.join(self.base_dir, self.image_names[image_index])
 
     def image_aspect_ratio(self, image_index):
         """ Compute the aspect ratio for an image with image_index.
