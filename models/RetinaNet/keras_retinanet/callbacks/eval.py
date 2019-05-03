@@ -16,9 +16,11 @@ limitations under the License.
 
 import keras
 from ..utils.eval import evaluate
+import os
+import tensorflow as tf
+import re
 
-
-class Evaluate(keras.callbacks.Callback):
+class Evaluate(keras.callbacks.TensorBoard):
     """ Evaluation callback for arbitrary datasets.
     """
 
@@ -31,7 +33,8 @@ class Evaluate(keras.callbacks.Callback):
         save_path=None,
         tensorboard=None,
         weighted_average=False,
-        verbose=1
+        verbose=1,
+        log_dir='./logs'
     ):
         """ Evaluate a given dataset using a given model at the end of every epoch during training.
 
@@ -54,11 +57,17 @@ class Evaluate(keras.callbacks.Callback):
         self.weighted_average = weighted_average
         self.verbose         = verbose
 
-        super(Evaluate, self).__init__()
+        metrics = ['loss' ,'regression_loss', 'classification_loss', 'lr', 'mAP']
+        self.writers = {}
+        for metric in metrics:
+            for side in ['tr_', 'val_']:
+                self.writers[side+metric+'_writer'] = tf.summary.FileWriter(os.path.join(log_dir, side+metric))
+
+        super(Evaluate, self).__init__(write_graph=False)
 
     def on_epoch_end(self, epoch, logs=None):
         logs = logs or {}
-
+        
         # run evaluation
         average_precisions = evaluate(
             self.generator,
@@ -84,7 +93,7 @@ class Evaluate(keras.callbacks.Callback):
             self.mean_ap = sum(precisions) / sum(x > 0 for x in total_instances)
 
         if self.tensorboard is not None and self.tensorboard.writer is not None:
-            import tensorflow as tf
+            # import tensorflow as tf
             summary = tf.Summary()
             summary_value = summary.value.add()
             summary_value.simple_value = self.mean_ap
@@ -95,3 +104,20 @@ class Evaluate(keras.callbacks.Callback):
 
         if self.verbose == 1:
             print('mAP: {:.4f}'.format(self.mean_ap))
+
+        for name, value in logs.items():
+            summary = tf.Summary()
+            summary_value = summary.value.add()
+            summary_value.simple_value = value.item()
+
+            writer = name+'_writer' if re.search('(val)', name) else 'tr_'+name+'_writer' 
+            name = 'loss' if re.Ssearch(r'(loss)', name) else name      
+            summary_value.tag = name
+
+            self.writers[writer].add_summary(summary, epoch)
+            self.writers[writer].flush()
+
+    def on_train_end(self, logs=None):
+        super(Evaluate, self).on_train_end(logs)
+        for v in self.writers:
+            v.close()

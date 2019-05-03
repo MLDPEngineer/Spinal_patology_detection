@@ -26,6 +26,8 @@ import csv
 import sys
 import os.path
 
+# def on_epoch_end(self, epoch, logs=None):
+#     print(logs)
 
 def _parse(value, function, fmt):
     """
