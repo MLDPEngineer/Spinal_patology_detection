@@ -111,7 +111,7 @@ class Evaluate(keras.callbacks.TensorBoard):
             summary_value.simple_value = value.item()
 
             writer = name+'_writer' if re.search('(val)', name) else 'tr_'+name+'_writer' 
-            name = 'loss' if re.Search(r'(loss)', name) else name      
+            name = 'loss' if re.search(r'(loss)', name) else name      
             summary_value.tag = name
 
             self.writers[writer].add_summary(summary, epoch)
