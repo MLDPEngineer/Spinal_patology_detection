@@ -523,10 +523,6 @@ def run(args=None):
         validation_data=validation_generator
     )
 
-        # csv /home/protus/Documents/Projects/CompVision/train_annotations.csv \
-        # /home/protus/Documents/Projects/CompVision/classes.csv \
-        # --val-annotations /home/protus/Documents/Projects/CompVision/valid_annotations.csv".split()
-
 def train_ipython(steps=None, 
                     batch_size=1,
                     epochs=10,
@@ -550,11 +546,11 @@ def train_ipython(steps=None,
         --val-annotations {4}". \
         format(steps, epochs, train_annotations, classes, valid_annotations).split()
 
-    run(args)
+    return run(args)
 
 
 def main(args=None):
-    run(args)
+    return run(args)
 
 
 if __name__ == '__main__':
