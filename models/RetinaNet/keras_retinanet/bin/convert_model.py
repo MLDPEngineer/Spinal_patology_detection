@@ -37,8 +37,8 @@ from ..utils.config import read_config_file, parse_anchor_parameters
 def get_session():
     """ Construct a modified tf session.
     """
-    config = tf.ConfigProto()
-    os.environ["CUDA_VISIBLE_DEVICES"] = ""
+    config = tf.ConfigProto(device_count = {'GPU': 0})
+    # os.environ["CUDA_VISIBLE_DEVICES"] = ""
     return tf.Session(config=config)
 
 
