@@ -52,7 +52,9 @@
 ---
 ###Результаты
 ![Tensor Board](/content/TensorBoard.png)
-Процеесс обучения про.
+Не смотря на "парвильные" кривые лосса и метрик, модель переобучилась.
+![Inference](./content/inference.png)
+
 
 
 ----
