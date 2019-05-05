@@ -523,7 +523,7 @@ def run(args=None):
         validation_data=validation_generator
     )
 
-    return training_model
+    return model, training_model, prediction_model 
 
 def train_ipython(steps=None, 
                     batch_size=1,
