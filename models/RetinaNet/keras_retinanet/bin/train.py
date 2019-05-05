@@ -511,7 +511,7 @@ def run(args=None):
         validation_generator = None
 
     # start training
-    return training_model.fit_generator(
+    training_model.fit_generator(
         generator=train_generator,
         steps_per_epoch=args.steps,
         epochs=args.epochs,
@@ -522,6 +522,8 @@ def run(args=None):
         max_queue_size=args.max_queue_size,
         validation_data=validation_generator
     )
+
+    return training_model
 
 def train_ipython(steps=None, 
                     batch_size=1,
